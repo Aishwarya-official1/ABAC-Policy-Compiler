@@ -1,0 +1,12 @@
+permit if subject.role == "admin";
+
+permit if subject.role = "admin";
+
+
+deny if subject.role == "guest" and object.type == "file" and action.name == "delete";
+
+permit subject.role == "admin";
+
+permit    if    subject . role  ==  "admin"   and  object . type == "file"  ;
+
+

@@ -1,0 +1,103 @@
+Case 1 — Valid Policy (No Error)
+Policy p1;
+p1.name = "P1";
+p1.conditions.push_back({"subject","role","manager"});
+p1.conditions.push_back({"object","type","document"});
+p1.conditions.push_back({"action","action","read"});
+p1.effect = "permit";
+
+policies.push_back(p1);
+
+Case 2 — Undefined Attribute
+Policy p1;
+p1.name = "P1";
+p1.conditions.push_back({"subject","salary","5000"});
+p1.effect = "permit";
+
+policies.push_back(p1);
+
+
+Expected error:
+
+Semantic Error: Undefined attribute 'salary'
+
+Case 3 — Type Mismatch
+Policy p1;
+p1.name = "P1";
+p1.conditions.push_back({"object","sensitivity","high"});
+p1.effect = "permit";
+
+policies.push_back(p1);
+
+
+Expected error:
+
+Semantic Error: Type mismatch for attribute 'sensitivity'
+
+Case 4 — Duplicate Policy Name
+Policy p1;
+p1.name = "P1";
+p1.conditions.push_back({"subject","role","admin"});
+p1.effect = "permit";
+
+policies.push_back(p1);
+
+Policy p2;
+p2.name = "P1";
+p2.conditions.push_back({"subject","role","user"});
+p2.effect = "deny";
+
+policies.push_back(p2);
+
+
+Expected error:
+
+Semantic Error: Duplicate policy name 'P1'
+
+Case 5 — Invalid Effect
+Policy p1;
+p1.name = "P1";
+p1.conditions.push_back({"subject","role","admin"});
+p1.effect = "allow";
+
+policies.push_back(p1);
+
+
+Expected error:
+
+Semantic Error: Invalid effect
+
+Case 6 — Policy Conflict
+Policy p1;
+p1.name = "P1";
+p1.conditions.push_back({"subject","role","admin"});
+p1.conditions.push_back({"object","type","file"});
+p1.conditions.push_back({"action","action","read"});
+p1.effect = "permit";
+
+policies.push_back(p1);
+
+Policy p2;
+p2.name = "P2";
+p2.conditions.push_back({"subject","role","admin"});
+p2.conditions.push_back({"object","type","file"});
+p2.conditions.push_back({"action","action","read"});
+p2.effect = "deny";
+
+policies.push_back(p2);
+
+
+Expected error:
+
+Semantic Conflict: Policies P1 and P2 contradict each other
+
+Case 7 — Integer Attribute Correct
+Policy p1;
+p1.name = "P1";
+p1.conditions.push_back({"object","sensitivity","5"});
+p1.effect = "permit";
+
+policies.push_back(p1);
+
+
+This should pass semantic check.
